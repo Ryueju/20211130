@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.eju.prj.book.service.BookMapper">
+	<select id="bookList" resultType="co.eju.prj.book.service.BookVO">
+		SELECT * FROM BOOKS ORDER BY 1
+	</select>
+	
+	<select id="bookSelect" resultType="co.eju.prj.book.service.BookVO">
+		SELECT * FROM BOOKS 
+		WHERE ID = ${id}
+		ORDER BY 1
+	</select>
+	
+	<select id="bookSearchList" parameterType="String" resultType="co.eju.prj.book.service.BookVO">
+		SELECT * FROM BOOKS
+		WHERE subject like '%'||#{searchKey}||'%'
+	</select>
+	
+	<insert id="bookInsert"	parameterType="co.eju.prj.book.service.BookVO">
+		<selectKey	keyProperty="id" resultType="int" order ="BEFORE">
+			SELECT MAX(id)+1 FROM BOOKS
+		</selectKey>
+			INSERT INTO BOOKS
+			VALUES (#{id},#{title},#{author},#{image},#{subject})
+	</insert>
+	
+	<update id="bookUpdate" parameterType="co.eju.prj.book.service.BookVO">
+			UPDATE BOOKS
+			<set>
+				<if test="id != null">ID=#{id},</if>
+				<if test="title != null">TITLE=#{title},</if>
+				<if test="author != null">AUTHOR=#{author},</if>
+				<if test="image != null">IMAGE=#{image},</if>
+				<if test="subject != null">SUBJECT=#{subject}</if>
+			</set>
+			WHERE ID=#{id}
+	</update>
+	
+	<delete id="bookDelete" parameterType="co.eju.prj.book.service.BookVO">
+			DELETE FROM BOOKS
+			WHERE ID=#{id}
+			
+	</delete>
+
+
+</mapper>
